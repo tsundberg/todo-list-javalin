@@ -1,8 +1,10 @@
+package se.thinkcode;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TodoListIT {
+public class TodoListTest {
 
     private final TodoList todoList = new TodoList();
 

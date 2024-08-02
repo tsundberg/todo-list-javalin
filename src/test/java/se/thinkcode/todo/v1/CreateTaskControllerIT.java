@@ -20,10 +20,10 @@ public class CreateTaskControllerIT {
         InMemoryTaskRepository repository = new InMemoryTaskRepository();
         service = new TodoService(repository);
 
+        Routes routes = new Routes();
         CreateTaskController createTaskController = new CreateTaskController(service);
-        GetAllTasksController getAllTasksController = new GetAllTasksController(service);
+        routes.addHandler(createTaskController);
 
-        Routes routes = new Routes(createTaskController, getAllTasksController);
         routes.routes(app);
     }
 

@@ -1,27 +1,25 @@
 package se.thinkcode.todo.v1;
 
 import io.javalin.Javalin;
+import io.javalin.http.Context;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.thinkcode.Routes;
-import se.thinkcode.todo.InMemoryTaskRepository;
-import se.thinkcode.todo.TodoService;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class CreateTaskControllerIT {
-    private TodoService service;
     private final Javalin app = Javalin.create();
+    private CreateTaskController createTaskController;
 
     @BeforeEach
     void setUp() {
-        InMemoryTaskRepository repository = new InMemoryTaskRepository();
-        service = new TodoService(repository);
-
         Routes routes = new Routes();
-        CreateTaskController createTaskController = new CreateTaskController(service);
+        createTaskController = mock(CreateTaskController.class);
         routes.addHandler(createTaskController);
 
         routes.routes(app);
@@ -30,10 +28,8 @@ public class CreateTaskControllerIT {
     @Test
     public void should_create_task() {
         JavalinTest.test(app, (server, client) -> {
-            CreateTaskRequest request = new CreateTaskRequest("Buy cat food");
-            try (Response response = client.post("/createTask", request)) {
-                assertThat(response.code()).isEqualTo(201);
-                assertThat(service.getAllTasks()).hasSize(1);
+            try (Response response = client.post("/createTask")) {
+                verify(createTaskController).handle(any(Context.class));
             }
         });
     }

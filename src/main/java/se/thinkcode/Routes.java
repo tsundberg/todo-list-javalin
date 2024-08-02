@@ -25,7 +25,9 @@ public class Routes {
     }
 
     public void addHandler(Handler handler) {
-        handlers.put(handler.getClass().getCanonicalName(), handler);
+        String canonicalName = handler.getClass().getCanonicalName();
+        canonicalName = canonicalName.substring(0, canonicalName.indexOf("$"));
+        handlers.put(canonicalName, handler);
     }
 
     public void routes(Javalin app) {

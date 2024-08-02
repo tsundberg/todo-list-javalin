@@ -16,6 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetAllTasksControllerIT {
+    private final JavalinJackson javalinJackson = new JavalinJackson();
     private final Javalin app = Javalin.create();
     private TodoService service;
 
@@ -33,18 +34,18 @@ public class GetAllTasksControllerIT {
 
     @Test
     public void should_get_all_tasks() {
+        GetTasksResponse expected = new GetTasksResponse(List.of("Buy cat food"));
         Task task = new Task("Buy cat food");
         service.createTask(task);
 
-        GetTasksResponse expectedResponse = GetTasksResponse.fromModel(List.of(new Task("Buy cat food")));
-        String expected = new JavalinJackson().toJsonString(expectedResponse, GetTasksResponse.class);
-
         JavalinTest.test(app, (server, client) -> {
             Response response = client.get("/getAllTasks");
+
             assertThat(response.code()).isEqualTo(200);
-            // todo serialize the response into the expected object
             assertThat(response.body()).isNotNull();
-            assertThat(response.body().string()).isEqualTo(expected);
+
+            GetTasksResponse actual = javalinJackson.fromJsonStream(response.body().byteStream(), GetTasksResponse.class);
+            assertThat(actual).isEqualTo(expected);
         });
     }
 }

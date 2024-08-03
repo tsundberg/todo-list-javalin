@@ -14,17 +14,23 @@ public class Routes {
     private final Map<String, Handler> handlers = new HashMap<>();
 
     public Routes() {
-        InMemoryTaskRepository repository = new InMemoryTaskRepository();
-        TodoService service = new TodoService(repository);
-
-        CreateTaskController createTaskController = new CreateTaskController(service);
-        GetAllTasksController getAllTasksController = new GetAllTasksController(service);
+        CreateTaskController createTaskController = new CreateTaskController(getTodoService());
+        GetAllTasksController getAllTasksController = new GetAllTasksController(getTodoService());
 
         handlers.put(createTaskController.getClass().getCanonicalName(), createTaskController);
         handlers.put(getAllTasksController.getClass().getCanonicalName(), getAllTasksController);
     }
 
-    public void overideController(Handler handler, Class<? extends Handler> controller) {
+    private TodoService getTodoService() {
+        InMemoryTaskRepository repository = getInMemoryTaskRepository();
+        return new TodoService(repository);
+    }
+
+    private InMemoryTaskRepository getInMemoryTaskRepository() {
+        return new InMemoryTaskRepository();
+    }
+
+    public void overrideController(Handler handler, Class<? extends Handler> controller) {
         String canonicalName = controller.getCanonicalName();
         handlers.put(canonicalName, handler);
     }
@@ -34,11 +40,11 @@ public class Routes {
         app.get("/getAllTasks", getGetAllTasksController());
     }
 
-    public Handler getCreateTaskController() {
+    private Handler getCreateTaskController() {
         return handlers.get(CreateTaskController.class.getCanonicalName());
     }
 
-    public Handler getGetAllTasksController() {
+    private Handler getGetAllTasksController() {
         return handlers.get(GetAllTasksController.class.getCanonicalName());
     }
 }

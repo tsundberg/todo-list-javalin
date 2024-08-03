@@ -21,13 +21,9 @@ public class Routes {
         handlers.put(getAllTasksController.getClass().getCanonicalName(), getAllTasksController);
     }
 
-    private TodoService getTodoService() {
-        InMemoryTaskRepository repository = getInMemoryTaskRepository();
-        return new TodoService(repository);
-    }
-
-    private InMemoryTaskRepository getInMemoryTaskRepository() {
-        return new InMemoryTaskRepository();
+    public void routes(Javalin app) {
+        app.post("/createTask", getCreateTaskController());
+        app.get("/getAllTasks", getGetAllTasksController());
     }
 
     public void overrideController(Handler handler, Class<? extends Handler> controller) {
@@ -35,9 +31,13 @@ public class Routes {
         handlers.put(canonicalName, handler);
     }
 
-    public void routes(Javalin app) {
-        app.post("/createTask", getCreateTaskController());
-        app.get("/getAllTasks", getGetAllTasksController());
+    private TodoService getTodoService() {
+        InMemoryTaskRepository repository = getInMemoryTaskRepository();
+        return new TodoService(repository);
+    }
+
+    private InMemoryTaskRepository getInMemoryTaskRepository() {
+        return new InMemoryTaskRepository();
     }
 
     private Handler getCreateTaskController() {

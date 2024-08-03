@@ -28,7 +28,7 @@ public class GetAllTasksControllerIT {
 
         Routes routes = new Routes();
         GetAllTasksController getAllTasksController = new GetAllTasksController(service);
-        routes.overideController(getAllTasksController, GetAllTasksController.class);
+        routes.overrideController(getAllTasksController, GetAllTasksController.class);
 
         routes.routes(app);
     }

@@ -21,7 +21,7 @@ class CreateTaskControllerIT {
     void setUp() {
         Routes routes = new Routes();
         createTaskController = mock(CreateTaskController.class);
-        routes.overideController(createTaskController, CreateTaskController.class);
+        routes.overrideController(createTaskController, CreateTaskController.class);
 
         routes.routes(app);
     }

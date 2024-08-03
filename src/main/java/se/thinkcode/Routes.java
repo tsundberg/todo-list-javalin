@@ -24,9 +24,8 @@ public class Routes {
         handlers.put(getAllTasksController.getClass().getCanonicalName(), getAllTasksController);
     }
 
-    public void addHandler(Handler handler) {
-        String canonicalName = handler.getClass().getCanonicalName();
-        canonicalName = canonicalName.substring(0, canonicalName.indexOf("$"));
+    public void overideController(Handler handler, Class<? extends Handler> controller) {
+        String canonicalName = controller.getCanonicalName();
         handlers.put(canonicalName, handler);
     }
 

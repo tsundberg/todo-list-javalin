@@ -2,6 +2,7 @@ package se.thinkcode.todo.v1;
 
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se.thinkcode.todo.InMemoryTaskRepository;
 import se.thinkcode.todo.TaskRepository;
@@ -18,10 +19,17 @@ public class GetAllTasksControllerTest {
     private final GetAllTasksController controller = new GetAllTasksController(service);
 
     @Test
-    void should_create_task() {
+    void should_get_all_tasks_using_a_mock() {
         controller.handle(ctx);
 
         verify(ctx).json(any(GetTasksResponse.class), eq(GetTasksResponse.class));
         verify(ctx).status(HttpStatus.OK);
+    }
+
+    @Test
+    @Disabled
+    void should_get_all_tasks_using_a_concrete_implementation() {
+        // todo implement me
+        throw new RuntimeException("Not yet implemented");
     }
 }

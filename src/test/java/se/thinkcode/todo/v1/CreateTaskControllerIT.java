@@ -56,8 +56,8 @@ class CreateTaskControllerIT {
 
                 List<Task> actual = service.getAllTasks();
 
-                assertThat(actual).containsExactlyInAnyOrder(new Task("Buy cat food"));
                 assertThat(response.code()).isEqualTo(201);
+                assertThat(actual).containsExactlyInAnyOrder(new Task("Buy cat food"));
             }
         });
     }

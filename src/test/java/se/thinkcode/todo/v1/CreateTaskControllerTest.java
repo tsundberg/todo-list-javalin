@@ -23,6 +23,7 @@ class CreateTaskControllerTest {
     @Test
     void should_create_task_using_a_mock() {
         when(ctx.bodyAsClass(CreateTaskRequest.class)).thenReturn(new CreateTaskRequest("Buy cat food"));
+        
         controller.handle(ctx);
 
         verify(ctx).status(HttpStatus.CREATED);

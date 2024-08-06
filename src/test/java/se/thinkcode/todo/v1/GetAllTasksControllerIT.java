@@ -31,6 +31,7 @@ public class GetAllTasksControllerIT {
 
         JavalinTest.test(app, (server, client) -> {
             client.get("/getAllTasks");
+            
             verify(getAllTasksController).handle(any(Context.class));
         });
     }

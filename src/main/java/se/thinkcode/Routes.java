@@ -11,14 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Routes {
-    private final Map<String, Handler> handlers = new HashMap<>();
+    private final Map<String, Handler> overriden = new HashMap<>();
 
     public Routes() {
-        CreateTaskController createTaskController = new CreateTaskController(getTodoService());
-        GetAllTasksController getAllTasksController = new GetAllTasksController(getTodoService());
-
-        handlers.put(createTaskController.getClass().getCanonicalName(), createTaskController);
-        handlers.put(getAllTasksController.getClass().getCanonicalName(), getAllTasksController);
     }
 
     public void routes(Javalin app) {
@@ -26,13 +21,15 @@ public class Routes {
         app.get("/getAllTasks", getGetAllTasksController());
     }
 
-    public void overrideController(Handler handler, Class<? extends Handler> controller) {
-        String canonicalName = controller.getCanonicalName();
-        handlers.put(canonicalName, handler);
+    public void overrideController(Handler controller, Class<? extends Handler> controllerClass) {
+        String canonicalName = controllerClass.getCanonicalName();
+
+        overriden.put(canonicalName, controller);
     }
 
     private TodoService getTodoService() {
         InMemoryTaskRepository repository = getInMemoryTaskRepository();
+
         return new TodoService(repository);
     }
 
@@ -41,10 +38,20 @@ public class Routes {
     }
 
     private Handler getCreateTaskController() {
-        return handlers.get(CreateTaskController.class.getCanonicalName());
+        String key = CreateTaskController.class.getCanonicalName();
+        if (overriden.containsKey(key)) {
+            return overriden.get(key);    
+        }     
+        
+        return new CreateTaskController(getTodoService());
     }
 
     private Handler getGetAllTasksController() {
-        return handlers.get(GetAllTasksController.class.getCanonicalName());
+        String key = GetAllTasksController.class.getCanonicalName();
+        if (overriden.containsKey(key)) {
+            return overriden.get(key);    
+        }     
+
+        return new GetAllTasksController(getTodoService());
     }
 }

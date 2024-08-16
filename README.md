@@ -1,6 +1,6 @@
 # A todo list
 
-In order to explore Javalin, one needs a small project to try things out.
+In order to explore [Javalin](https://javalin.io/), one needs a small project to try things out.
 
 This is such a project.
 

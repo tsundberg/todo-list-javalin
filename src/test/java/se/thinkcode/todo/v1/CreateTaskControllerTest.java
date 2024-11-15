@@ -3,10 +3,7 @@ package se.thinkcode.todo.v1;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import org.junit.jupiter.api.Test;
-import se.thinkcode.todo.InMemoryTaskRepository;
-import se.thinkcode.todo.Task;
-import se.thinkcode.todo.TaskRepository;
-import se.thinkcode.todo.TodoService;
+import se.thinkcode.todo.*;
 
 import java.util.List;
 
@@ -22,8 +19,8 @@ class CreateTaskControllerTest {
 
     @Test
     void should_create_task_using_a_mock() {
-        when(ctx.bodyAsClass(CreateTaskRequest.class)).thenReturn(new CreateTaskRequest("Buy cat food"));
-        
+        when(ctx.bodyAsClass(CreateTaskRequest.class)).thenReturn(new CreateTaskRequest("Kalle", "Buy cat food"));
+
         controller.handle(ctx);
 
         verify(ctx).status(HttpStatus.CREATED);
@@ -31,10 +28,10 @@ class CreateTaskControllerTest {
 
     @Test
     void should_create_task_using_a_concrete_implementation() {
-        when(ctx.bodyAsClass(CreateTaskRequest.class)).thenReturn(new CreateTaskRequest("Buy cat food"));
+        when(ctx.bodyAsClass(CreateTaskRequest.class)).thenReturn(new CreateTaskRequest("Kalle", "Buy cat food"));
 
         controller.handle(ctx);
-        List<Task> actual = service.getAllTasks();
+        List<Task> actual = service.getTasks(new Owner("Kalle"));
 
         assertThat(actual).containsExactlyInAnyOrder(new Task("Buy cat food"));
     }

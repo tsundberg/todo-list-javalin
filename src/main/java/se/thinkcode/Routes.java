@@ -18,7 +18,7 @@ public class Routes {
 
     public void routes(Javalin app) {
         app.post("/createTask", getCreateTaskController());
-        app.get("/getAllTasks", getGetAllTasksController());
+        app.get("/getAllTasks/{owner}", getGetAllTasksController());
     }
 
     public void overrideController(Handler controller, Class<? extends Handler> controllerClass) {

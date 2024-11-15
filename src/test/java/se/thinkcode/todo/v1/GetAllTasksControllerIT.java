@@ -8,6 +8,7 @@ import okhttp3.Response;
 import org.junit.jupiter.api.Test;
 import se.thinkcode.Routes;
 import se.thinkcode.todo.InMemoryTaskRepository;
+import se.thinkcode.todo.Owner;
 import se.thinkcode.todo.Task;
 import se.thinkcode.todo.TodoService;
 
@@ -30,7 +31,7 @@ public class GetAllTasksControllerIT {
         routes.routes(app);
 
         JavalinTest.test(app, (server, client) -> {
-            client.get("/getAllTasks");
+            client.get("/getAllTasks/Kalle");
             
             verify(getAllTasksController).handle(any(Context.class));
         });
@@ -47,11 +48,12 @@ public class GetAllTasksControllerIT {
         routes.routes(app);
 
         GetTasksResponse expected = new GetTasksResponse(List.of("Buy cat food"));
+        Owner owner = new Owner("Kalle");
         Task task = new Task("Buy cat food");
-        service.createTask(task);
+        service.createTask(owner, task);
 
         JavalinTest.test(app, (server, client) -> {
-            Response response = client.get("/getAllTasks");
+            Response response = client.get("/getAllTasks/Kalle");
 
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body()).isNotNull();

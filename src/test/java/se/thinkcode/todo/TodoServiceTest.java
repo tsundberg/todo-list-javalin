@@ -13,10 +13,11 @@ public class TodoServiceTest {
 
     @Test
     void should_create_a_task() {
+        Owner owner = new Owner("David");
         Task task = new Task("Buy cat food");
 
-        service.createTask(task);
-        List<Task> actual = service.getAllTasks();
+        service.createTask(owner, task);
+        List<Task> actual = service.getTasks(owner);
 
         assertThat(actual).containsExactlyInAnyOrder(task);
     }

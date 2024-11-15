@@ -3,7 +3,7 @@ package se.thinkcode.todo;
 import java.util.List;
 
 public interface TaskRepository {
-    void createTask(Task task);
+    void createTask(Owner owner, Task task);
 
-    List<Task> getAllTasks();
+    List<Task> getTasks(Owner owner);
 }

@@ -7,10 +7,7 @@ import io.javalin.testtools.JavalinTest;
 import okhttp3.Response;
 import org.junit.jupiter.api.Test;
 import se.thinkcode.Routes;
-import se.thinkcode.todo.InMemoryTaskRepository;
-import se.thinkcode.todo.Task;
-import se.thinkcode.todo.TaskRepository;
-import se.thinkcode.todo.TodoService;
+import se.thinkcode.todo.*;
 
 import java.util.List;
 
@@ -46,15 +43,15 @@ class CreateTaskControllerIT {
         routes.overrideController(createTaskController, CreateTaskController.class);
         routes.routes(app);
 
-        CreateTaskRequest request = new CreateTaskRequest("Buy cat food");
+        CreateTaskRequest request = new CreateTaskRequest("Kalle", "Buy cat food");
 
         JavalinJackson javalinJackson = new JavalinJackson();
+
         String json = javalinJackson.toJsonString(request, CreateTaskRequest.class);
 
         JavalinTest.test(app, (server, client) -> {
             try (Response response = client.post("/createTask", json)) {
-
-                List<Task> actual = service.getAllTasks();
+                List<Task> actual = service.getTasks(new Owner("Kalle"));
 
                 assertThat(response.code()).isEqualTo(201);
                 assertThat(actual).containsExactlyInAnyOrder(new Task("Buy cat food"));

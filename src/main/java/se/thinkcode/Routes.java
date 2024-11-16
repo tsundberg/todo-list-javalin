@@ -4,8 +4,6 @@ import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import se.thinkcode.todo.InMemoryTaskRepository;
 import se.thinkcode.todo.TodoService;
-import se.thinkcode.todo.v1.CreateTaskController;
-import se.thinkcode.todo.v1.GetAllTasksController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +15,11 @@ public class Routes {
     }
 
     public void routes(Javalin app) {
-        app.post("/createTask", getCreateTaskController());
-        app.get("/getAllTasks/{owner}", getGetAllTasksController());
+        app.post("/v1/createTask", getCreateTaskControllerV1());
+        app.get("/v1/getAllTasks/{owner}", getGetAllTasksControllerV1());
+
+        app.post("/v2/createTask", getCreateTaskControllerV2());
+        app.get("/v2/getAllTasks/{owner}", getGetAllTasksControllerV2());
     }
 
     /**
@@ -41,21 +42,39 @@ public class Routes {
         return new InMemoryTaskRepository();
     }
 
-    private Handler getCreateTaskController() {
-        String key = CreateTaskController.class.getCanonicalName();
+    private Handler getCreateTaskControllerV1() {
+        String key = se.thinkcode.todo.v1.CreateTaskController.class.getCanonicalName();
         if (overriden.containsKey(key)) {
             return overriden.get(key);
         }
 
-        return new CreateTaskController(getTodoService());
+        return new se.thinkcode.todo.v1.CreateTaskController(getTodoService());
     }
 
-    private Handler getGetAllTasksController() {
-        String key = GetAllTasksController.class.getCanonicalName();
+    private Handler getGetAllTasksControllerV1() {
+        String key = se.thinkcode.todo.v1.GetAllTasksController.class.getCanonicalName();
         if (overriden.containsKey(key)) {
             return overriden.get(key);
         }
 
-        return new GetAllTasksController(getTodoService());
+        return new se.thinkcode.todo.v1.GetAllTasksController(getTodoService());
+    }
+
+    private Handler getCreateTaskControllerV2() {
+        String key = se.thinkcode.todo.v2.CreateTaskController.class.getCanonicalName();
+        if (overriden.containsKey(key)) {
+            return overriden.get(key);
+        }
+
+        return new se.thinkcode.todo.v2.CreateTaskController(getTodoService());
+    }
+
+    private Handler getGetAllTasksControllerV2() {
+        String key = se.thinkcode.todo.v2.GetAllTasksController.class.getCanonicalName();
+        if (overriden.containsKey(key)) {
+            return overriden.get(key);
+        }
+
+        return new se.thinkcode.todo.v2.GetAllTasksController(getTodoService());
     }
 }

@@ -1,4 +1,4 @@
-package se.thinkcode.todo.v1;
+package se.thinkcode.todo.v2;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -11,6 +11,7 @@ import se.thinkcode.todo.InMemoryTaskRepository;
 import se.thinkcode.todo.Owner;
 import se.thinkcode.todo.Task;
 import se.thinkcode.todo.TodoService;
+
 
 import java.util.List;
 
@@ -26,12 +27,12 @@ public class GetAllTasksControllerIT {
 
     @Test
     void should_verify_route_using_a_mock() {
-        GetAllTasksController getAllTasksController = mock(GetAllTasksController.class);
-        routes.overrideController(getAllTasksController, GetAllTasksController.class);
+         GetAllTasksController getAllTasksController = mock( GetAllTasksController.class);
+        routes.overrideController(getAllTasksController,GetAllTasksController.class);
         routes.routes(app);
 
         JavalinTest.test(app, (server, client) -> {
-            client.get("/v1/getAllTasks/Kalle");
+            client.get("/v2/getAllTasks/Kalle");
             
             verify(getAllTasksController).handle(any(Context.class));
         });
@@ -42,23 +43,23 @@ public class GetAllTasksControllerIT {
         InMemoryTaskRepository repository = new InMemoryTaskRepository();
         TodoService service = new TodoService(repository);
 
-        GetAllTasksController getAllTasksController = new GetAllTasksController(service);
+         GetAllTasksController getAllTasksController = new  GetAllTasksController(service);
         routes.overrideController(getAllTasksController, GetAllTasksController.class);
 
         routes.routes(app);
 
-        GetTasksResponse expected = new GetTasksResponse(List.of("Buy cat food"));
+         GetTasksResponse expected = new  GetTasksResponse(List.of("Buy cat food"));
         Owner owner = new Owner("Kalle");
         Task task = new Task("Buy cat food");
         service.createTask(owner, task);
 
         JavalinTest.test(app, (server, client) -> {
-            Response response = client.get("/v1/getAllTasks/Kalle");
+            Response response = client.get("/v2/getAllTasks/Kalle");
 
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body()).isNotNull();
 
-            GetTasksResponse actual = javalinJackson.fromJsonStream(response.body().byteStream(), GetTasksResponse.class);
+             GetTasksResponse actual = javalinJackson.fromJsonStream(response.body().byteStream(), GetTasksResponse.class);
             assertThat(actual).isEqualTo(expected);
         });
     }

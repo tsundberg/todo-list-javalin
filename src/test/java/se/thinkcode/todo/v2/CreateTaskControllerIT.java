@@ -1,4 +1,4 @@
-package se.thinkcode.todo.v1;
+package se.thinkcode.todo.v2;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -26,7 +26,7 @@ class CreateTaskControllerIT {
         routes.overrideController(createTaskController, CreateTaskController.class);
         routes.routes(app);
         JavalinTest.test(app, (server, client) -> {
-            Response response = client.post("/v1/createTask");
+            Response response = client.post("/v2/createTask");
 
             verify(createTaskController).handle(any(Context.class));
 
@@ -49,7 +49,7 @@ class CreateTaskControllerIT {
         String json = javalinJackson.toJsonString(request, CreateTaskRequest.class);
 
         JavalinTest.test(app, (server, client) -> {
-            try (Response response = client.post("/v1/createTask", json)) {
+            try (Response response = client.post("/v2/createTask", json)) {
                 assertThat(response.code()).isEqualTo(201);
 
                 List<Task> actual = service.getTasks(new Owner("Kalle"));

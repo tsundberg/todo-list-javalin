@@ -15,15 +15,11 @@ public class CreateTaskController implements Handler {
     }
 
     public void handle(Context ctx) {
-
-        String body = ctx.body();
-
         CreateTaskRequest request = ctx.bodyAsClass(CreateTaskRequest.class);
 
-
         Owner owner = request.toOwner();
-         Task task = request.toTask();
-         service.createTask(owner, task);
+        Task task = request.toTask();
+        service.createTask(owner, task);
 
         ctx.status(HttpStatus.CREATED);
     }

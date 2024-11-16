@@ -21,6 +21,10 @@ public class Routes {
         app.get("/getAllTasks/{owner}", getGetAllTasksController());
     }
 
+    /**
+     * Add any controller you want to override in a test here,
+     * and it will be used instead of the default one.
+     */
     public void overrideController(Handler controller, Class<? extends Handler> controllerClass) {
         String canonicalName = controllerClass.getCanonicalName();
 
@@ -40,17 +44,17 @@ public class Routes {
     private Handler getCreateTaskController() {
         String key = CreateTaskController.class.getCanonicalName();
         if (overriden.containsKey(key)) {
-            return overriden.get(key);    
-        }     
-        
+            return overriden.get(key);
+        }
+
         return new CreateTaskController(getTodoService());
     }
 
     private Handler getGetAllTasksController() {
         String key = GetAllTasksController.class.getCanonicalName();
         if (overriden.containsKey(key)) {
-            return overriden.get(key);    
-        }     
+            return overriden.get(key);
+        }
 
         return new GetAllTasksController(getTodoService());
     }

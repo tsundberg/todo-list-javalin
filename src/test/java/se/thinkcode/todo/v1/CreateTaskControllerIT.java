@@ -46,14 +46,13 @@ class CreateTaskControllerIT {
         CreateTaskRequest request = new CreateTaskRequest("Kalle", "Buy cat food");
 
         JavalinJackson javalinJackson = new JavalinJackson();
-
         String json = javalinJackson.toJsonString(request, CreateTaskRequest.class);
 
         JavalinTest.test(app, (server, client) -> {
             try (Response response = client.post("/createTask", json)) {
-                List<Task> actual = service.getTasks(new Owner("Kalle"));
-
                 assertThat(response.code()).isEqualTo(201);
+
+                List<Task> actual = service.getTasks(new Owner("Kalle"));
                 assertThat(actual).containsExactlyInAnyOrder(new Task("Buy cat food"));
             }
         });

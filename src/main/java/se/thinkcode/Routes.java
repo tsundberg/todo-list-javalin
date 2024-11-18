@@ -4,6 +4,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Handler;
 import se.thinkcode.todo.InMemoryTaskRepository;
 import se.thinkcode.todo.TodoService;
+import se.thinkcode.todo.v1.GetTasksController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,12 +53,12 @@ public class Routes {
     }
 
     private Handler getGetAllTasksControllerV1() {
-        String key = se.thinkcode.todo.v1.GetAllTasksController.class.getCanonicalName();
+        String key = GetTasksController.class.getCanonicalName();
         if (overriden.containsKey(key)) {
             return overriden.get(key);
         }
 
-        return new se.thinkcode.todo.v1.GetAllTasksController(getTodoService());
+        return new GetTasksController(getTodoService());
     }
 
     private Handler getCreateTaskControllerV2() {
@@ -70,11 +71,11 @@ public class Routes {
     }
 
     private Handler getGetAllTasksControllerV2() {
-        String key = se.thinkcode.todo.v2.GetAllTasksController.class.getCanonicalName();
+        String key = se.thinkcode.todo.v2.GetTasksController.class.getCanonicalName();
         if (overriden.containsKey(key)) {
             return overriden.get(key);
         }
 
-        return new se.thinkcode.todo.v2.GetAllTasksController(getTodoService());
+        return new se.thinkcode.todo.v2.GetTasksController(getTodoService());
     }
 }

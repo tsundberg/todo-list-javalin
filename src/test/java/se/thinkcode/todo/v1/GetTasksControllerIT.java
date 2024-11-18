@@ -19,21 +19,21 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class GetAllTasksControllerIT {
+public class GetTasksControllerIT {
     private final JavalinJackson javalinJackson = new JavalinJackson();
     private final Javalin app = Javalin.create();
     private final Routes routes = new Routes();
 
     @Test
     void should_verify_route_using_a_mock() {
-        GetAllTasksController getAllTasksController = mock(GetAllTasksController.class);
-        routes.overrideController(getAllTasksController, GetAllTasksController.class);
+        GetTasksController getTasksController = mock(GetTasksController.class);
+        routes.overrideController(getTasksController, GetTasksController.class);
         routes.routes(app);
 
         JavalinTest.test(app, (server, client) -> {
             client.get("/v1/getAllTasks/Kalle");
             
-            verify(getAllTasksController).handle(any(Context.class));
+            verify(getTasksController).handle(any(Context.class));
         });
     }
 
@@ -42,8 +42,8 @@ public class GetAllTasksControllerIT {
         InMemoryTaskRepository repository = new InMemoryTaskRepository();
         TodoService service = new TodoService(repository);
 
-        GetAllTasksController getAllTasksController = new GetAllTasksController(service);
-        routes.overrideController(getAllTasksController, GetAllTasksController.class);
+        GetTasksController getTasksController = new GetTasksController(service);
+        routes.overrideController(getTasksController, GetTasksController.class);
 
         routes.routes(app);
 

@@ -9,13 +9,13 @@ import se.thinkcode.todo.TodoService;
 
 import static org.mockito.Mockito.*;
 
-public class GetAllTasksControllerTest {
+public class GetTasksControllerTest {
 
     private final TaskRepository repository = new InMemoryTaskRepository();
     private final TodoService service = new TodoService(repository);
 
     private final Context ctx = mock(Context.class);
-    private final GetAllTasksController controller = new GetAllTasksController(service);
+    private final GetTasksController controller = new GetTasksController(service);
 
     @Test
     void should_get_all_tasks_using_a_mock() {

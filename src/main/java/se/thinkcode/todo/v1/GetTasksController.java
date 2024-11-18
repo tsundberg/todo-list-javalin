@@ -1,4 +1,4 @@
-package se.thinkcode.todo.v2;
+package se.thinkcode.todo.v1;
 
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
@@ -9,10 +9,10 @@ import se.thinkcode.todo.TodoService;
 
 import java.util.List;
 
-public class GetAllTasksController implements Handler {
+public class GetTasksController implements Handler {
     private final TodoService service;
 
-    public GetAllTasksController(TodoService service) {
+    public GetTasksController(TodoService service) {
         this.service = service;
     }
 

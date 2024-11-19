@@ -21,9 +21,9 @@ public class GetTasksController implements Handler {
         String name = ctx.pathParam("owner");
         Owner owner = new Owner(name);
         List<Task> tasks = service.getTasks(owner);
-        GetTasksResponse response = GetTasksResponse.fromModel(tasks);
+        List<GetTasksResponse> response = GetTasksResponse.fromModel(tasks);
 
-        ctx.json(response, GetTasksResponse.class);
         ctx.status(HttpStatus.OK);
+        ctx.json(response, GetTasksResponse.class);
     }
 }

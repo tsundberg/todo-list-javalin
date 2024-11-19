@@ -5,15 +5,15 @@ import se.thinkcode.todo.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public record GetTasksResponse(List<String> tasks) {
+public record GetTasksResponse(String tasks) {
 
-    public static GetTasksResponse fromModel(List<Task> tasks) {
-        List<String> tasksAsString = new ArrayList<>(tasks.size());
-
-        for (Task task : tasks) {
-            tasksAsString.add(task.task());
+    public static List<GetTasksResponse> fromModel(List<Task> taskList) {
+        List<GetTasksResponse> res = new ArrayList<>();
+        for (Task task : taskList) {
+            String t = task.task();
+            GetTasksResponse getTasksResponse = new GetTasksResponse(t);
+            res.add(getTasksResponse);
         }
-
-        return new GetTasksResponse(tasksAsString);
+        return res;
     }
 }

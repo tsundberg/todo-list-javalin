@@ -12,9 +12,6 @@ import java.util.Map;
 public class Routes {
     private final Map<String, Handler> overriden = new HashMap<>();
 
-    public Routes() {
-    }
-
     public void routes(Javalin app) {
         app.post("/v1/createTask", getCreateTaskControllerV1());
         app.get("/v1/getAllTasks/{owner}", getGetAllTasksControllerV1());
@@ -45,37 +42,21 @@ public class Routes {
 
     private Handler getCreateTaskControllerV1() {
         String key = se.thinkcode.todo.v1.CreateTaskController.class.getCanonicalName();
-        if (overriden.containsKey(key)) {
-            return overriden.get(key);
-        }
-
-        return new se.thinkcode.todo.v1.CreateTaskController(getTodoService());
+        return overriden.getOrDefault(key, new se.thinkcode.todo.v1.CreateTaskController(getTodoService()));
     }
 
     private Handler getGetAllTasksControllerV1() {
         String key = GetTasksController.class.getCanonicalName();
-        if (overriden.containsKey(key)) {
-            return overriden.get(key);
-        }
-
-        return new GetTasksController(getTodoService());
+        return overriden.getOrDefault(key, new GetTasksController(getTodoService()));
     }
 
     private Handler getCreateTaskControllerV2() {
         String key = se.thinkcode.todo.v2.CreateTaskController.class.getCanonicalName();
-        if (overriden.containsKey(key)) {
-            return overriden.get(key);
-        }
-
-        return new se.thinkcode.todo.v2.CreateTaskController(getTodoService());
+        return overriden.getOrDefault(key, new se.thinkcode.todo.v2.CreateTaskController(getTodoService()));
     }
 
     private Handler getGetAllTasksControllerV2() {
         String key = se.thinkcode.todo.v2.GetTasksController.class.getCanonicalName();
-        if (overriden.containsKey(key)) {
-            return overriden.get(key);
-        }
-
-        return new se.thinkcode.todo.v2.GetTasksController(getTodoService());
+        return overriden.getOrDefault(key, new se.thinkcode.todo.v2.GetTasksController(getTodoService()));
     }
 }

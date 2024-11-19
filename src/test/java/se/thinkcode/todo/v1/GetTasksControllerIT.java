@@ -1,5 +1,6 @@
 package se.thinkcode.todo.v1;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.json.JavalinJackson;
@@ -32,13 +33,14 @@ public class GetTasksControllerIT {
 
         JavalinTest.test(app, (server, client) -> {
             client.get("/v1/getAllTasks/Kalle");
-            
+
             verify(getTasksController).handle(any(Context.class));
         });
     }
 
     @Test
     void should_verify_route_using_a_concrete_implementation() {
+        ObjectMapper mapper = javalinJackson.getMapper();
         InMemoryTaskRepository repository = new InMemoryTaskRepository();
         TodoService service = new TodoService(repository);
 
@@ -47,7 +49,7 @@ public class GetTasksControllerIT {
 
         routes.routes(app);
 
-        GetTasksResponse expected = new GetTasksResponse(List.of("Buy cat food"));
+        GetTasksResponse expected = new GetTasksResponse("Buy cat food");
         Owner owner = new Owner("Kalle");
         Task task = new Task("Buy cat food");
         service.createTask(owner, task);
@@ -58,8 +60,10 @@ public class GetTasksControllerIT {
             assertThat(response.code()).isEqualTo(200);
             assertThat(response.body()).isNotNull();
 
-            GetTasksResponse actual = javalinJackson.fromJsonStream(response.body().byteStream(), GetTasksResponse.class);
-            assertThat(actual).isEqualTo(expected);
+            List<GetTasksResponse> actual = mapper.readerForListOf(GetTasksResponse.class)
+                    .readValue(response.body().byteStream());
+
+            assertThat(actual).containsExactly(expected);
         });
     }
 }

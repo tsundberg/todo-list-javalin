@@ -11,11 +11,11 @@ class GetTasksResponseTest {
 
     @Test
     void should_transform_from_model() {
-        GetTasksResponse expected = new GetTasksResponse(List.of("Buy cat food"));
+        GetTasksResponse expected = new GetTasksResponse("Buy cat food");
         List<Task> tasks = List.of(new Task("Buy cat food"));
 
-        GetTasksResponse actual = GetTasksResponse.fromModel(tasks);
+        List<GetTasksResponse> actual = GetTasksResponse.fromModel(tasks);
 
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).containsExactly(expected);
     }
 }

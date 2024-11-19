@@ -9,7 +9,7 @@ public class InMemoryTaskRepository implements TaskRepository {
     private final Map<Owner, List<Task>> tasks = new HashMap<>();
 
     @Override
-    public void createTask(Owner owner, Task task) {
+    public void add(Owner owner, Task task) {
         List<Task> taskLs = tasks.getOrDefault(owner, new ArrayList<>());
         taskLs.add(task);
         tasks.put(owner, taskLs);

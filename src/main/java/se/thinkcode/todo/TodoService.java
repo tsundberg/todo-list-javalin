@@ -11,7 +11,7 @@ public class TodoService {
     }
 
     public void createTask(Owner owner, Task task) {
-        repository.createTask(owner, task);
+        repository.add(owner, task);
     }
 
     public List<Task> getTasks(Owner owner) {
